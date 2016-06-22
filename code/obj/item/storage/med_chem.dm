@@ -364,6 +364,12 @@
 	desc = "Huh."
 	spawn_contents = list(/obj/item/reagent_containers/pill/cyberpunk = 5)
 
+/obj/item/storage/pill_bottle/penteticacid
+	name = "pill bottle (pentetic acid)"
+	desc = "Apex anti-tox/anti-rad treatment"
+	spawn_contents = list(/obj/item/reagent_containers/pill/penteticacid = 5)
+
+
 /obj/item/storage/pill_bottle/suicide(var/mob/user as mob)
 	user.visible_message("<span style=\"color:red\"><b>[user] swallows the [src.name] whole and begins to choke!</b></span>")
 	user.take_oxygen_deprivation(175)
