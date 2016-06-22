@@ -968,3 +968,60 @@
 		pickupdialogue = "Thank you very mhHHHONK- Uh, nothing."
 
 		pickupdialoguefailure = "You need to BUY things before you pick them up!"
+		
+		
+		/obj/npc/trader/exclown
+	icon = 'icons/obj/trader.dmi'
+	icon_state = "exclown"
+	picture = "exclown.png"
+	name = "Spaceman Spiff"
+	trader_area = "/area/hallway/secondary/entry"
+
+	New()
+		..()
+		/////////////////////////////////////////////////////////
+		//// sell list //////////////////////////////////////////
+		/////////////////////////////////////////////////////////
+		src.goods_sell += new /obj/item/reagent_containers/food/drinks/rum_spaced(400)
+		src.goods_sell += new /obj/decal/fakeobjects/moonrock(1000)
+		src.goods_sell += new /obj/item/clothing/head/emerg(200)
+		src.goods_sell += new /obj/item/clothing/suit/space/emerg(600)
+		src.goods_sell += new /obj/item/reagent_containers/food/snacks/ice_cream/random(60)
+		src.goods_sell += new /datum/commodity/costume/wonka(src)
+		src.goods_sell += new /datum/commodity/costume/light_borg(src)
+		src.goods_sell += new /datum/commodity/costume/utena(src)
+		src.goods_sell += new /datum/commodity/balloons(src)
+		/////////////////////////////////////////////////////////
+		//// buy list ///////////////////////////////////////////
+		/////////////////////////////////////////////////////////
+		src.goods_buy += new /datum/commodity/goldbar(src)
+		/////////////////////////////////////////////////////////
+
+		greeting= {"Psst, I've got what you need HON- Ahem, disregard that."}
+
+		portrait_setup = "<img src='[resource("images/traders/[src.picture]")]'><HR><B>[src.name]</B><HR>"
+
+		sell_dialogue = "Waddya have to sell?"
+
+		buy_dialogue = "Feel free to browse my wares, but you better hurry!"
+
+		successful_purchase_dialogue = list("Another satisfied customer.",
+			"Thank you.",
+			"It's been a pleasure doing business with you.")
+
+		failed_sale_dialogue = list("Don't waste my time, kid, I can't buy that!",
+			"I've got nobody who wants to buy that junk!",
+			"What, do you think I'm stupid?!?  Get out of here!",
+			"Haha, nice try kid, but I've been in the business longer than that.")
+
+		successful_sale_dialogue = list("Thank you very much!",
+			"I'll take it!",
+			"Come back anytime!")
+
+		failed_purchase_dialogue = list("Come back when you can afford this stuff!",
+			"You ain't got the cash, kid!",
+			"Might want to check your account, 'cause I don't see the money in it!")
+
+		pickupdialogue = "Thank you very mhHHHONK- Uh, nothing."
+
+		pickupdialoguefailure = "You need to BUY things before you pick them up!"
