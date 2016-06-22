@@ -343,6 +343,16 @@
 	name = "salbutamol pill"
 	desc = "Used to treat respiratory distress."
 	icon_state = "pill4"
+	
+/obj/item/reagent_containers/pill/penteticacid
+	name = "pentetic acid pill"
+	desc = "Apex anti-radiation and anti-toxin treatment. Flushes other chemicals in the bloodstream as well."
+	icon_state = "pill5"
+	initial_volume = 100
+
+	New()
+		..()
+		reagents.add_reagent("penteticacid", 10)
 
 	New()
 		var/datum/reagents/R = new/datum/reagents(100)
