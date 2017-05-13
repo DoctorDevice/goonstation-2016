@@ -291,6 +291,129 @@ datum
 						random_brute_damage(M, 5)
 						M.emote("twitch")
 
+		drug/donkonium
+			name = "Donkonium"
+			id = "Donkonium"
+			description = "Donkonium is a dangerous stimulant. The longer it's in you, the better it is at healing you - and the more dangerous it is."
+			reagent_state = LIQUID
+			fluid_r = 240
+			fluid_g = 230
+			fluid_b = 0
+			transparency = 50
+			var/drug_counter = 0
+			var/remove_buff = 0
+
+			pooled()
+			..()
+			drug_counter = 0
+
+			on_add()
+			if(istype(holder) && istype(holder.my_atom) && hascall(holder.my_atom,"add_stam_mod_regen"))
+			    remove_buff = holder.my_atom:add_stam_mod_regen("consumable_good", 3)
+			return
+
+			on_remove()
+			if(remove_buff)
+			    if(istype(holder) && istype(holder.my_atom) && hascall(holder.my_atom,"remove_stam_mod_regen"))
+				holder.my_atom:remove_stam_mod_regen("consumable_good")
+			// Less than 10 units
+			if (drug_counter < 25)
+			    boutput(M, "<span style=\"color:blue\"><b>You feel like that could have been better.</b></span>")
+			    M.stunned += 2
+			    M.make_jittery(10)
+			// Less than 20 units
+			else if (drug_counter < 50)
+			    boutput(M, "<span style=\"color:blue\"><b>Damn, you were on a roll.</b></span>")
+			    M.stunned += 4
+			    M.reagents.add_reagent("itching", 10)
+			    M.make_jittery(10)
+
+			// Less than 30 units
+			else if (drug_counter < 75)
+			    boutput(M, "<span style=\"color:red\"><b>FUCK!<b></span><span style=\"color:blue\"> It was just getting good!</span>")
+			    M.visible_message("<span style=\"color:red\">[M] pukes all over \himself.</span>")
+			    playsound(M.loc, "sound/effects/splat.ogg", 50, 1)
+			    new /obj/decal/cleanable/vomit(M.loc)
+			    M.stunned += 6
+			    M.make_jittery(10)
+			    M.reagents.add_reagent("histamine", 10)
+			    M.reagents.add_reagent("itching", 10)
+			    M.reagents.add_reagent("glitter", 10)
+			// Less than 40 units
+			else if (drug_counter < 100)
+			    boutput(M, "<span style=\"color:red\"><b>NO! YOU NEED MORE! WHY DID YOU STOP?!<b></span>")
+			    M.emote("scream")
+			    sleep(2)
+			    M.visible_message("<span style=\"color:red\">[M] pukes all over \himself.</span>")
+			    playsound(M.loc, "sound/effects/splat.ogg", 50, 1)
+			    new /obj/decal/cleanable/vomit(M.loc)
+			    M.stunned += 8
+			    M.make_jittery(20)
+			    M.reagents.add_reagent("sarin", 1)
+			    M.reagents.add_reagent("histamine", 10)
+			    M.reagents.add_reagent("itching", 10)
+			    M.reagents.add_reagent("glitter", 10)
+			// More than 40 units
+			else if (drug_counter > 100)
+			    boutput(M, "<span style=\"color:red\"><b>Oh fuck, where's the DONKness???</b></span>")
+			    sleep(2)
+			    M.visible_message("<span style=\"color:red\">[M] is consumed in flames! That's reDONKulous!</span>")
+			    M.firegib()
+			return
+
+			on_mob_life(var/mob/M)
+
+			if (!M) M = holder.my_atom
+			if (src.volume <= src.depletion_rate)
+			    M.take_toxin_damage(drug_counter * rand(2,4))
+			    M.updatehealth()
+			else
+			    drug_counter++
+
+			    if (M.get_oxygen_deprivation())
+				M.take_oxygen_deprivation(-5)
+			    if (M.get_toxin_damage())
+				M.take_toxin_damage(-1)
+			    if (M.slowed)
+				M.slowed = 0
+			    if (M.misstep_chance)
+				M.change_misstep_chance(-INFINITY)
+			    M.dizziness = max(0,M.dizziness-10)
+			    M.drowsyness = max(0,M.drowsyness-10)
+			    M.sleeping = 0
+
+			    if (drug_counter < 25)
+				M.HealDamage("All", 2, 2)
+				if(prob(50))
+				    if(M.paralysis) M.paralysis-=1.5
+				    if(M.stunned) M.stunned-=1.5
+				    if(M.weakened) M.weakened-=1.5
+			    else if (drug_counter < 50)
+				M.HealDamage("All", 3, 3)
+				M.reagents.remove_reagent(Donkonium, 0.4)
+				if(M.paralysis) M.paralysis-=1.5
+				if(M.stunned) M.stunned-=1.5
+				if(M.weakened) M.weakened-=1.5
+			    else if (drug_counter < 75)
+				M.HealDamage("All", 4, 4)
+				M.reagents.remove_reagent(Donkonium, 0.6)
+				if(M.paralysis) M.paralysis-=2
+				if(M.stunned) M.stunned-=2
+				if(M.weakened) M.weakened-=2
+			    else if (drug_counter < 100)
+				M.HealDamage("All", 5, 5)
+				M.reagents.remove_reagent(Donkonium, 0.8)
+				if(M.paralysis) M.paralysis-=2
+				if(M.stunned) M.stunned-=2
+				if(M.weakened) M.weakened-=2
+			    else
+				M.HealDamage("All", 6, 6)
+				M.reagents.remove_reagent(Donkonium, 1.2)
+				if(M.paralysis) M.paralysis-=3
+				if(M.stunned) M.stunned-=3
+				if(M.weakened) M.weakened-=3
+			    M.updatehealth()
+			..(M)
 		drug/LSD
 			name = "lysergic acid diethylamide"
 			id = "LSD"
